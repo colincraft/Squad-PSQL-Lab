@@ -1,0 +1,8 @@
+<% @students.each do |student| %>
+  <h3><%= student["name"] %> </h3>
+  <a href="/squads/<%= student["squad_id"] %>/students/<%= student["id"] %>">View student</a><br><br>
+  <a href="/students/<%= student["id"]%>/edit">Edit student</a>
+
+  <% end %>
+
+  

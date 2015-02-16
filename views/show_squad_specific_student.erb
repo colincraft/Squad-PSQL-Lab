@@ -1,0 +1,11 @@
+<% @students.each do |student| %>
+  <h3><%= student["name"] %> </h3>
+  <h2><%= student["spirit_animal"] %> </h2>
+  <h2><%= student["age"] %> </h2>
+    <form action="/squads/<%= student["squad_id"] %>/students/<%= student["id"] %>%>" method="POST">
+    <input type="hidden" value="DELETE" name="_method">
+    <input type="submit" value="Delete">
+  </form>
+  <% end %>
+
+

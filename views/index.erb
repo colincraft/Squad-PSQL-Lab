@@ -1,0 +1,9 @@
+  <h1>THESE MY STUDENTS</h1>
+  <% @squads.each do |squad| %>
+  <h3><%= squad["name"] %> </h3>
+  <a href="/squads/<%= squad["id"] %>">View Squad</a><br><br>
+  <a href="/squads/<%= squad["id"]%>/edit">Edit Squad</a>
+  <% end %>
+  <p>
+    <a href="/squads/new">Add a new squad!</a>
+</p>
