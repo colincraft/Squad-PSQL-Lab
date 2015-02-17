@@ -48,6 +48,7 @@ get '/squads/:squad_id' do
 erb :show
 end
 
+
 # EDIT SPECIFIC SQUAD 
 get '/squads/:squad_id/edit' do
   id = params[:squad_id].to_i
@@ -68,6 +69,11 @@ get '/squads/:squad_id/students' do
   @students = students
   erb :show_squad_students
 end
+# CREATE NEW STUDENT FOR SQUAD FORM PAGE
+get '/squads/:squad_id/students/new' do
+  @squad_id = params[:squad_id].to_i
+  erb :newstudent
+end
 
 # SHOW SPECIFC INFO FOR A STUDENT IN SQUAD
 get '/squads/:squad_id/students/:student_id' do
@@ -76,11 +82,8 @@ get '/squads/:squad_id/students/:student_id' do
   erb :show_squad_specific_student
 end
 
-# CREATE NEW STUDENT FOR SQUAD FORM PAGE
-get '/squads/:squad_id/students/new' do
-  @squad_id = params[:squad_id].to_i
-  erb :newstudent
-end
+
+
 # EDIT STUDENTS INFO PAGE
 get '/squads/:squad_id/students/:student_id/edit' do
   squad_id = params[:squad_id].to_i
@@ -98,7 +101,7 @@ post '/squads' do
 end
 # CREATE NEW STUDENT FOR EXISITING SQUAD
 post '/squads/:squad_id/students' do
-
+  @conn.exec("INSERT INTO students (name, squad_id) VALUES ($1,$2)", [params[:name], params[:squad_id]])
   redirect '/squads'
 end
 
