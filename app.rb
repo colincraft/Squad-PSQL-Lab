@@ -78,7 +78,7 @@ end
 
 # CREATE NEW STUDENT FOR SQUAD FORM PAGE
 get '/squads/:squad_id/students/new' do
-  # @squad_id = params[:squad_id].to_i
+  @squad_id = params[:squad_id].to_i
   erb :newstudent
 end
 # EDIT STUDENTS INFO PAGE
@@ -99,7 +99,7 @@ end
 # CREATE NEW STUDENT FOR EXISITING SQUAD
 post '/squads/:squad_id/students' do
 
-  # redirect '/squads'
+  redirect '/squads'
 end
 
 # PUT ROUTES
@@ -112,8 +112,8 @@ put '/squads/:squad_id' do
 end
 # EDIT STUDENT IN EXISTING SQUAD
 put '/squads/:squad_id/students' do
-  student_id = params[:student_id].to_i
-  @conn.exec('UPDATE students SET name=$1 WHERE id = $2', [ params[:name], student_id ] )
+  student_id = params[:squad_id].to_i
+  @conn.exec("UPDATE students SET name = $1 WHERE id = $2", [params[:name], student_id])
   redirect "/squads"
 end
 
