@@ -18,25 +18,25 @@ end
 # GET ROUTES
 # ROOT DIRECTORY
 get '/' do
-redirect '/squads'
+  redirect '/squads'
 end
 
 #SHOW ALL SQUADS
 get '/squads' do
   squads = []
-    @conn.exec( "SELECT * FROM squads ORDER BY id ASC") do |result|
-      result.each do |squad|
-        squads << squad
-      end
+  @conn.exec( "SELECT * FROM squads ORDER BY id ASC") do |result|
+    result.each do |squad|
+      squads << squad
     end
-    @squads = squads
+  end
+  @squads = squads
 
-erb :index
+  erb :index
 end
 
 # CREATE NEW SQUAD FORM PAGE
 get '/squads/new' do
-erb :new
+  erb :new
 end
 
 # SHOW SPECIFIC SQUAD
@@ -44,7 +44,7 @@ get '/squads/:squad_id' do
   id = params[:squad_id].to_i
   squad = @conn.exec("SELECT * FROM squads WHERE id=$1", [id])
   @squad = squad[0]
-  # binding.pry
+# binding.pry
 erb :show
 end
 
@@ -53,37 +53,41 @@ get '/squads/:squad_id/edit' do
   id = params[:squad_id].to_i
   squad = @conn.exec("SELECT * FROM squads WHERE id=$1", [id])
   @squad = squad[0]
-erb :edit
+  erb :edit
 end
 
 # SHOW ALL STUDENTS FOR SPECIFIC SQUAD
 get '/squads/:squad_id/students' do
   students = []
   id = params[:squad_id].to_i
-    @conn.exec( "SELECT * FROM students WHERE squad_id=$1", [id]) do |result|
-      result.each do |student|
-        students << student
-      end
+  @conn.exec( "SELECT * FROM students WHERE squad_id=$1", [id]) do |result|
+    result.each do |student|
+      students << student
     end
-    @students = students
-erb :show_squad_students
+  end
+  @students = students
+  erb :show_squad_students
 end
 
 # SHOW SPECIFC INFO FOR A STUDENT IN SQUAD
 get '/squads/:squad_id/students/:student_id' do
   student_id = params[:student_id].to_i
   @students = @conn.exec("SELECT * FROM students WHERE id=$1", [student_id])
-erb :show_squad_specific_student
+  erb :show_squad_specific_student
 end
 
 # CREATE NEW STUDENT FOR SQUAD FORM PAGE
 get '/squads/:squad_id/students/new' do
-  @squad_id = params[:squad_id].to_i
+  # @squad_id = params[:squad_id].to_i
   erb :newstudent
 end
 # EDIT STUDENTS INFO PAGE
 get '/squads/:squad_id/students/:student_id/edit' do
-erb :edit_student_for_specific_squad
+  squad_id = params[:squad_id].to_i
+  id = params[:student_id].to_i
+  student = @conn.exec('SELECT * FROM students WHERE id = $1 AND squad_id = $2', [ id, squad_id ] )
+  @student = student[0]
+  erb :edit_student_for_specific_squad
 end
 
 # POST ROUTES
@@ -95,7 +99,7 @@ end
 # CREATE NEW STUDENT FOR EXISITING SQUAD
 post '/squads/:squad_id/students' do
 
-redirect '/squads'
+  # redirect '/squads'
 end
 
 # PUT ROUTES
@@ -104,12 +108,13 @@ put '/squads/:squad_id' do
   id= params[:squad_id].to_i
   @conn.exec("UPDATE squads SET name = ($1) WHERE id = ($2)", [params[:name], id])
 
-redirect '/squads'
+  redirect '/squads'
 end
 # EDIT STUDENT IN EXISTING SQUAD
 put '/squads/:squad_id/students' do
-
-redirect '/squads'
+  student_id = params[:student_id].to_i
+  @conn.exec('UPDATE students SET name=$1 WHERE id = $2', [ params[:name], student_id ] )
+  redirect "/squads"
 end
 
 # DELETE ROUTES
@@ -117,11 +122,11 @@ end
 delete '/squads/:squad_id' do
   id= params[:squad_id].to_i
   @conn.exec("DELETE FROM squads WHERE id = ($1)", [id])
-redirect '/squads'
+  redirect '/squads'
 end
 # DELETE STUDENT IN SQUAD
 delete '/squads/:squad_id/students/:student_id' do
-id= params[:student_id].to_i
-  @conn.exec("DELETE FROM students WHERE id = ($1)", [id])
-redirect '/squads'
+  id= params[:student_id].to_i
+  @conn.exec("DELETE FROM students WHERE id = $1", [id])
+  redirect '/squads'
 end

@@ -1,0 +1,13 @@
+  <form action="/squads/<%= @student["id"] %>/students" method="POST">
+  <label for="edit_student"></label>
+    <input type="hidden" value="PUT" name="_method">
+    <label for="name">Name: </label>
+    <input type="text" name="name" id="name" value="<%= @student["name"] %>">
+    <input type="submit" value="Edit">
+  </form>
+
+
+<form action="/squads/<%= @student["squad_id"] %>/students/<%= @student["id"] %>" method="POST">
+    <input type="hidden" value="DELETE" name="_method">
+    <input type="submit" value="Delete">
+  </form>
